@@ -6,12 +6,12 @@ class Router
 {
     private static $routes = [];
 
-    static public function add(string $method, string $path, string $controler, string $function):void
+    static public function add(string $method, string $path, string $controller, string $function):void
     {
         self::$routes[] = [
             'method' => $method,
             'path' => $path,
-            'controler' => $controler,
+            'controller' => $controller,
             'function' => $function
         ];
     }
@@ -26,8 +26,15 @@ class Router
         $method = $_SERVER['REQUEST_METHOD'];
 
         foreach (self::$routes as $route) {
-            if($path == $route['path']  && $method == $route['method']){
-                echo "Controler: " . $route['controler'] . ", Function : " . $route['function'];
+            $pattern = "#^" .$route['path'] . "$#";
+            if(preg_match($pattern, $path, $variables) && $method == $route['method']){
+
+                $function = $route["function"];
+                $controller = new $route['controller'];
+
+                array_shift($variables);
+                call_user_func_array([$controller,$function], $variables);
+
                 return;
             }
         }

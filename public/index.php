@@ -17,11 +17,14 @@
 require_once  __DIR__ . "/../vendor/autoload.php";
 
 use Marselinus\BelajarMvc\App\Router;
+use Marselinus\BelajarMvc\Controller\HomeController;
+use Marselinus\BelajarMvc\Controller\ProductControler;
 
-Router::add("GET", "/", "test", "product");
-Router::add("GET", "/hello","helloControler", "hello");
-Router::add("GET", "/marselinus","marselController", "addMarsel");
-
+Router::add("GET", "/", HomeController::class, "index");
+Router::add("GET", "/hello", HomeController::class, "hello");
+Router::add("GET", "/world", HomeController::class, "world");
+Router::add("GET", "/bangjago", HomeController::class, "jago");
+Router::add("GET", "/products/([0-9a-zA-Z]*)/categories/([0-9a-zA-Z]*)", ProductControler::class, 'categories');
 Router::run();
 
 
